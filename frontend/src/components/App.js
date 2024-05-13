@@ -4,15 +4,17 @@ import HomePage from "./HomePage";
 import RoomJoinPage from "./RoomJoinPage";
 import CreateRoomPage from "./CreateRoomPage";
 
-export default class App extends Component {
-    constructor(props) {
-        super(props);
-    }
+const App = () => {
+    return (
+        <div className="center">
+            <HomePage />
+        </div>
+    );
+};
 
-    render() {
-        return <HomePage />;
-    }
-}
+export default App;
 
 const appDiv = document.getElementById("app");
 render(<App />, appDiv);
+
+

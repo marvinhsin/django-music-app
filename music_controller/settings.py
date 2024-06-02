@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ul2#w^c8ye-gyenqo#v)ns@i1i^zo@9*$c1qn!v4uaa9h3%mtq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django-spotiparty-e628e3422cd9.herokuapp.com', 'localhost']
 
 
 # Application definition

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Grid, Button, Typography } from "@material-ui/core";
 import CreateRoomPage from './CreateRoomPage';
+import MusicPlayer from './Musicplayer';
 
 
 
@@ -12,6 +13,8 @@ const Room = (props) => {
     const [isHost, setIsHost] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [spotifyAuthenticated, setSpotifyAuthenticated] = useState(false);
+    const [song, setSong] = useState({});
+    const [intervalId, setIntervalId] = useState('');
     const params = useParams();
     const navigate = useNavigate();
 
@@ -47,7 +50,7 @@ const Room = (props) => {
                         });
                 }
             });
-    }
+    };
 
 
     const leaveButtonPressed = () => {
@@ -87,7 +90,7 @@ const Room = (props) => {
                 </Grid>
             </Grid>
         );
-    }
+    };
 
 
     const renderSettingsButton = () => {
@@ -98,18 +101,48 @@ const Room = (props) => {
                 </Button>
             </Grid>
         );
-    }
+    };
 
-    useEffect(() => {
-        setRoomCode(params.roomCode);
-    }, [params.roomCode]);
+    const getCurrentSong = () => {
+        fetch('/spotify/current-song')
+            .then((response)  => {
+                if (!response.ok) {
+                    return {};
+                } else {
+                    return response.json();
+                }
+            }).then((data) => {
+                setSong(data);
+                console.log(data);
+            });
+    };
+
+    // useEffect(() => {
+    //     setRoomCode(params.roomCode);
+    // }, [params.roomCode]);
     
     useEffect(() => {
-        console.log(roomCode);
+        setRoomCode(params.roomCode);
+
         if (roomCode) {
+            const id = setInterval(getCurrentSong, 1000);
+            setIntervalId(id);
             getRoomDetails();
         }
+
+        return () => {
+            console.log(intervalId)
+            clearInterval(intervalId);
+        };
     }, [roomCode]);
+
+    // useEffect(() => {
+    //     console.log(roomCode);
+    //     if (roomCode) {
+    //         getRoomDetails();
+    //         getCurrentSong();
+    //     }
+    // }, [roomCode]);
 
 
 
@@ -123,21 +156,7 @@ const Room = (props) => {
                     Code: {roomCode}
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
-                <Typography variant="h6" compoment="h4">
-                    Votes: {votesToSkip}
-                </Typography>
-            </Grid>
-            <Grid item xs={12} align="center">
-                <Typography variant="h6" compoment="h4">
-                    Guest Can Pause: {guestCanPause ? 'Yes' : 'No'}
-                </Typography>
-            </Grid>
-            <Grid item xs={12} align="center">
-                <Typography variant="h6" compoment="h4">
-                    Host: {isHost ? 'Yes' : 'No'}
-                </Typography>
-            </Grid>
+            <MusicPlayer {...song} />
             {isHost ? renderSettingsButton() : null}
             <Grid item xs={12} align="center">
                 <Button variant="contained" color="secondary" onClick={leaveButtonPressed}>

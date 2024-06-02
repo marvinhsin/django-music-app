@@ -27,9 +27,9 @@ What things you need to install the software and how to install them:
 
 ### Start the development servers:
 
-Frontend: npm start
-Backend: python manage.py runserver
+- **Frontend**: npm start
+- **Backend**: python manage.py runserver
 
-### Credit  to
+## Credit  to
 
 Tech With Tim (@Tech-With-Tim)
